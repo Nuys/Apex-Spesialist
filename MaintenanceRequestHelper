@@ -1,0 +1,25 @@
+public class MaintenanceRequestHelper {
+    
+    public static void updateWorkOrders(List<Case>ClosedCaseList){
+        // update workorders
+        
+        List<Case> insertCaseList = new List<Case>();
+        for(Case case_i : ClosedCaseList)
+        {
+            Case newCase = new Case();
+            newCase.Type = 'Routine Maintenance';
+            newCase.Status = 'New';
+            newCase.Vehicle__c = case_i.Vehicle__c;
+            newCase.Subject =  case_i.Subject;
+            newCase.Date_Reported__c = Date.today();
+            newCase.Date_Due__c = Date.today();
+            newCase.Equipment__c = case_i.Equipment__c;
+            insertCaseList.add(newCase);
+        }
+        
+        if(insertCaseList.size()>0){
+            insert insertCaseList;	
+        }
+    }
+    
+}
