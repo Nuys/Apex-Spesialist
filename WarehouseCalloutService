@@ -1,0 +1,36 @@
+public with sharing class WarehouseCalloutService {
+    
+    private static final String WAREHOUSE_URL = 'https://th-superbadge-apex.herokuapp.com/equipment';
+    
+    // complete this method to make the callout (using @future) to the
+    // REST endpoint and update equipment on hand.
+    @future(callout=true)
+    public static void runWarehouseEquipmentSync(){
+        Http http = new Http();
+        HttpRequest request = new HttpRequest();
+        request.setMethod('GET');
+        request.setEndpoint(WAREHOUSE_URL);
+        HttpResponse response = http.send(request);
+        if(response.getStatusCode() == 200) {
+            List<Object> jsonResponse = (List<Object>)JSON.deserializeUntyped(response.getBody());
+            List<Product2> productList = new List<Product2>();
+            for(Object ob : jsonResponse) {
+                Map<String,Object> mapJson = (Map<String,Object>)ob;
+                Product2 productNew = new Product2(Replacement_Part__c = (Boolean)mapJson.get('replacement'),
+                                                   Name = (String)mapJson.get('name'),
+                                                   Maintenance_Cycle__c = (Integer)mapJson.get('maintenanceperiod'),
+                                                   Lifespan_Months__c = (Integer)mapJson.get('lifespan'),
+                                                   Cost__c = (Decimal) mapJson.get('lifespan'),
+                                                   Warehouse_SKU__c = (String)mapJson.get('sku'),
+                                                   Current_Inventory__c = (Double) mapJson.get('quantity')
+                                                  ); 
+                productList.add(productNew);
+            }
+            
+            if(productList.size()>0)
+                upsert productList;
+        }
+        
+    }
+    
+}
