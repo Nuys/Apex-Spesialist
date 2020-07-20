@@ -17,11 +17,11 @@ public with sharing class WarehouseCalloutService {
             for(Object ob : jsonResponse) {
                 Map<String,Object> mapJson = (Map<String,Object>)ob;
                 Product2 productNew = new Product2(Replacement_Part__c = (Boolean)mapJson.get('replacement'),
-                                                   Name = (String)mapJson.get('name'),
+                                                   Name = String.valueOf(mapJson.get('name')),
                                                    Maintenance_Cycle__c = (Integer)mapJson.get('maintenanceperiod'),
                                                    Lifespan_Months__c = (Integer)mapJson.get('lifespan'),
                                                    Cost__c = (Decimal) mapJson.get('lifespan'),
-                                                   Warehouse_SKU__c = (String)mapJson.get('sku'),
+                                                   Warehouse_SKU__c = String.valueOf(mapJson.get('sku')),
                                                    Current_Inventory__c = (Double) mapJson.get('quantity')
                                                   ); 
                 productList.add(productNew);
