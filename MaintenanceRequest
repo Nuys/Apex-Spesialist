@@ -1,0 +1,6 @@
+trigger MaintenanceRequest on Case (before update, after update) {
+    List<case>ClosedCaseList = [SELECT Id, subject, Vehicle__c, vehicle__r.Name, equipment__c, Type FROM Case WHERE status = 'closed' AND (Type = 'Repair' OR Type = 'Routine Maintenance') AND Id IN : Trigger.New];
+        
+    
+            MaintenanceRequestHelper.updateWorkOrders(ClosedCaseList);
+}
