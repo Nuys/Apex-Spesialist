@@ -38,7 +38,9 @@ private class MaintenanceRequestTest{
                 updateList.add(case_i);
             }
             update updateList;
-          System.assertEquals(2, updateList.size());
+        
         Test.stopTest();
+         List <Case> allCaseList = [SELECT Id FROM Case]; 
+          System.assertEquals(3, allCaseList.size());
     }
 }
